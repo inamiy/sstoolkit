@@ -157,6 +157,8 @@
  */
 @property (nonatomic, readonly, getter=isLoadingPage) BOOL loadingPage;
 
+@property (nonatomic, readonly) BOOL isDOMLoaded;
+
 /**
  Stops the loading of any web content managed by the receiver.
  

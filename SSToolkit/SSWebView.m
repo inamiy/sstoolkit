@@ -31,6 +31,7 @@
 @synthesize consoleEnabled = _consoleEnabled;
 @synthesize lastRequest = _lastRequest;
 @synthesize loadingPage = _loadingPage;
+@synthesize isDOMLoaded = _isDOMLoaded;
 
 #pragma mark - NSObject
 
@@ -120,6 +121,7 @@
     
 	[_lastRequest release];
 	_lastRequest = nil;
+	_isDOMLoaded = NO;
 }
 
 
@@ -182,6 +184,7 @@
 
 
 - (void)_DOMLoaded {
+	_isDOMLoaded = YES;
 	if ([_delegate respondsToSelector:@selector(webViewDidLoadDOM:)]) {
 		[_delegate webViewDidLoadDOM:self];
 	}
@@ -292,6 +295,7 @@
 - (void)loadData:(NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)encodingName baseURL:(NSURL *)baseURL {
 	[_lastRequest release];
 	_lastRequest = nil;
+	_isDOMLoaded = NO;
     
 	[_webView loadData:data MIMEType:MIMEType textEncodingName:encodingName baseURL:baseURL];
 }
@@ -300,6 +304,7 @@
 - (void)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL {
 	[_lastRequest release];
 	_lastRequest = nil;
+	_isDOMLoaded = NO;
     
 	if (!baseURL) {
 		baseURL = [NSURL URLWithString:@"http://localhost/"];
@@ -311,6 +316,7 @@
 - (void)loadRequest:(NSURLRequest *)aRequest {
 	[_lastRequest release];
 	_lastRequest = nil;
+	_isDOMLoaded = NO;
     
 	[_webView loadRequest:aRequest];
 }
@@ -319,6 +325,7 @@
 - (void)reload {
 	[_lastRequest release];
 	_lastRequest = nil;
+	_isDOMLoaded = NO;
     
 	[_webView reload];
 }
@@ -420,6 +427,7 @@
 		[_lastRequest release];
 		_lastRequest = [aRequest retain];
 		_testedDOM = NO;
+		_isDOMLoaded = NO;
 
 		[self _startLoading];
 	}
